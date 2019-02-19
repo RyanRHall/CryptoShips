@@ -20,6 +20,7 @@ contract Scholarship is usingOraclize {
   uint public daysToComplete;
   bool completed;
   mapping (address => string) public applications;
+  address[] public applicants;
 
   // testing
   string public test1;
@@ -51,16 +52,16 @@ contract Scholarship is usingOraclize {
     public {
       sponsor = tx.origin;
       scholarshipManager = msg.sender;
+      daysToComplete = _daysToComplete;
       instructions = _instructions;
       schoolName = _schoolName;
       courseName = _courseName;
-      daysToComplete = _daysToComplete;
   }
 
   /************************* Functions *************************/
 
-  function addressToString()
-    public
+  function _addressToString()
+    private
     view
     returns(string memory) {
       bytes32 value = bytes32(uint256(address(this)));
@@ -87,11 +88,12 @@ contract Scholarship is usingOraclize {
     public
     ensureInactive {
       applications[msg.sender] = applicationLink;
+      applicants.push(msg.sender);
   }
 
   function awardTo(address _recipient)
     public
-    /* ensureInactive */
+    ensureInactive
     sponsorOnly {
       recipient = _recipient;
       startedOn = block.timestamp;
@@ -100,17 +102,24 @@ contract Scholarship is usingOraclize {
   function claim(string memory verificationKey)
     payable
     public
-    /* ensureActive */
+    ensureActive
     recipientOnly {
       string memory query =
         /* "json(http://verify.cryptoships.xyz?verificationKey=".toSlice() */
         "json(http://localhost:8080?verificationKey=".toSlice()
         .concat(verificationKey.toSlice()).toSlice()
         .concat("&contractAddress=".toSlice()).toSlice()
-        .concat(addressToString().toSlice()).toSlice()
+        .concat(_addressToString().toSlice()).toSlice()
         .concat(").verified".toSlice());
       test1 = query;
       /* oraclize_query("URL", query); */
+  }
+
+  function getApplicants()
+    public
+    view
+    returns(address[]){
+      return applicants;
   }
 
   function reclaim()

@@ -1,29 +1,28 @@
-const ScholarshipManagerArtifact = artifacts.require("ScholarshipManager");
+const ScholarshipManager = artifacts.require("ScholarshipManager");
 
 contract("ScholarshipManager", async (accounts) => {
-  let ScholarshipManager;
+  let scholarshipManager;
 
   before(async () => {
-    ScholarshipManager = await ScholarshipManagerArtifact.deployed();
+    scholarshipManager = await ScholarshipManager.deployed();
   })
 
   // it("should", async () => {
-
   // });
 
   it("should use the testing endpoint", async () => {
-    const endpoint = await ScholarshipManager.verificationEndpoint();
-    assert.equal("http://localhost:8080", endpoint)
+    const endpoint = await scholarshipManager.verificationEndpoint();
+    assert.equal(endpoint, "http://localhost:8080")
   });
 
   it("should not have any scholarships to begin with", async () => {
-    const scholarships = await ScholarshipManager.getScholarships();
-    assert.equal(0, scholarships.length);
+    const scholarships = await scholarshipManager.getScholarships();
+    assert.equal(scholarships.length, 0);
   });
 
   it("allows creation of scholarships", async () => {
-    await ScholarshipManager.create(10, "test instructions", "test school", "test course");
-    const scholarships = await ScholarshipManager.getScholarships();
-    assert.equal(1, scholarships.length);
+    await scholarshipManager.create(10, "test instructions", "test school", "test course");
+    const scholarships = await scholarshipManager.getScholarships();
+    assert.equal(scholarships.length, 1);
   });
 });
