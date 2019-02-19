@@ -1,5 +1,9 @@
-var Scholarship = artifacts.require("./Scholarship.sol");
+var ScholarshipManager = artifacts.require("./ScholarshipManager.sol");
 
+// determine endpoint to use for verifying courses
+const verificationEndpoint = process.env.NODE_ENV == "production" ? "http://verify.cryptoships.xyz"  : "http://localhost:8080";
+
+// deploy the scholarship manager contract!
 module.exports = function(deployer) {
-  deployer.deploy(Scholarship, 5, "test");
+  deployer.deploy(ScholarshipManager, verificationEndpoint);
 };

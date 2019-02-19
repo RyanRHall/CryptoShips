@@ -1,7 +1,7 @@
 pragma solidity ^0.4.25;
 
-import "github.com/oraclize/ethereum-api/oraclizeAPI_0.4.25.sol";
-import "github.com/Arachnid/solidity-stringutils/strings.sol";
+import "../external_contracts/oraclizeAPI_0.4.25.sol";
+import "../external_contracts/strings.sol";
 
 contract Scholarship is usingOraclize {
   using strings for *;
@@ -11,7 +11,10 @@ contract Scholarship is usingOraclize {
   address public sponsor;
   address public recipient;
   address scholarshipManager;
-  string public courseId;
+  /* Course Info */
+  string public schoolName;
+  string public courseName;
+  /* Scholarship Info */
   string public instructions;
   uint public startedOn;
   uint public daysToComplete;
@@ -43,12 +46,14 @@ contract Scholarship is usingOraclize {
 
   /************************* Constructor *************************/
 
-  constructor(uint256 _daysToComplete, string memory _instructions)
+  constructor(uint256 _daysToComplete, string memory _instructions, string memory _schoolName, string memory _courseName)
     payable
     public {
       sponsor = tx.origin;
       scholarshipManager = msg.sender;
       instructions = _instructions;
+      schoolName = _schoolName;
+      courseName = _courseName;
       daysToComplete = _daysToComplete;
   }
 
