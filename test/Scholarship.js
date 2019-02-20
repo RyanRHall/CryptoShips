@@ -1,5 +1,6 @@
 const Scholarship = artifacts.require("Scholarship");
 const truffleAssert = require('truffle-assertions');
+const TT = require("../test_helpers/timeTravel");
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -13,8 +14,6 @@ contract("Scholarship", accounts => {
     let scholarship;
     before(async () => {
       scholarship = await Scholarship.new(10, "test instructions", "test school", "test course", { from: accounts[1] });
-      console.log(await scholarship.startedOn());
-      console.log(await scholarship.daysToComplete());
     })
     // Tests
     it("should be sponsored by transaction author", async () => {
@@ -38,9 +37,10 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "test instructions", "test school", "test course", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
+    });
     // Tests
     it("should add the application link to the mapping", async () => {
       assert.equal(await scholarship.applications(accounts[2]), "test link 2");
@@ -57,35 +57,69 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "test instructions", "test school", "test course", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
       await scholarship.awardTo(accounts[2], { from: accounts[1] });
     });
     // Tests
-    it("should not be invokable by anyone other than the sponsor", async () => {
+    it("should forbid awarding by anyone other than the sponsor", async () => {
       await truffleAssert.reverts(scholarship.awardTo(accounts[3], { from: accounts[2] }));
     });
     it("should mark recipient", async () => {
       assert.equal(await scholarship.recipient(), accounts[2]);
     });
-    it("should not permit changing recipient", async () => {
+    it("should forbid changing recipients", async () => {
       await truffleAssert.reverts(scholarship.awardTo(accounts[3], { from: accounts[1] }));
       assert.equal(await scholarship.recipient(), accounts[2]);
     });
   });
 
-  describe("#getApplications", () => {
+  describe("#getApplicants", () => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "test instructions", "test school", "test course", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
-      await scholarship.awardTo(accounts[2], { from: accounts[1] });
     });
     // Tests
+    it("should return a list of active applications", async () => {
+      const applications = await scholarship.getApplicants();
+      assert.equal(applications.length, 2);
+      assert(applications.includes(accounts[2]));
+      assert(applications.includes(accounts[3]));
+    });
   });
+
+  describe("#reclaim", () => {
+    // Setup
+    let expiredScholarship;
+    let validScholarship;
+    let startingSponsorBalance;
+    before(async () => {
+      expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(10, 'ether') });
+      validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1], value: web3.toWei(10, 'ether') });
+      await expiredScholarship.applyTo("test link", { from: accounts[2] });
+      await validScholarship.applyTo("test link", { from: accounts[2] });
+      await expiredScholarship.awardTo(accounts[2], { from: accounts[1] });
+      await validScholarship.awardTo(accounts[2], { from: accounts[1] });
+      TT.fastForward(10, "days");
+    });
+    it("should forbid reclaiming from accounts other than sponsor", async () => {
+      await truffleAssert.reverts(expiredScholarship.reclaim({ from: accounts[2] }));
+      assert.equal(startingSponsorBalance)
+    });
+    it("should permit reclaiming an expired scholarship", async () => {
+      await expiredScholarship.reclaim({ from: accounts[1] });
+    });
+    it("should forbid reclaiming a valid scholarship", async () => {
+      await truffleAssert.reverts(validScholarship.reclaim({ from: accounts[1] }));
+    });
+    // it("should", async () => {
+    // });
+  });
+
 
 
 

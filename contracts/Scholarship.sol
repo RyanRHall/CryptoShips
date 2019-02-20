@@ -81,7 +81,7 @@ contract Scholarship is usingOraclize {
     private
     view
     returns(bool) {
-      return recipient != address(0) && (block.timestamp - startedOn) <= daysToComplete;
+      return recipient != address(0) && (now - now % 1 days) - startedOn <= daysToComplete * 1 days;
   }
 
   function applyTo(string memory applicationLink)
@@ -96,12 +96,12 @@ contract Scholarship is usingOraclize {
     ensureInactive
     sponsorOnly {
       recipient = _recipient;
-      startedOn = block.timestamp;
+      startedOn = now - now % 1 days;
   }
 
   function claim(string memory verificationKey)
-    payable
     public
+    payable
     ensureActive
     recipientOnly {
       string memory query =
