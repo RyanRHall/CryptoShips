@@ -97,6 +97,7 @@ contract Scholarship is usingOraclize {
     sponsorOnly {
       recipient = _recipient;
       startedOn = now - now % 1 days;
+      delete applicants;
   }
 
   function claim(string memory verificationKey)

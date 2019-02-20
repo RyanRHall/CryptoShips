@@ -73,6 +73,10 @@ contract("Scholarship", accounts => {
       await truffleAssert.reverts(scholarship.awardTo(accounts[3], { from: accounts[1] }));
       assert.equal(await scholarship.recipient(), accounts[2]);
     });
+    it("should empty the list of applicants", async () => {
+      const applications = await scholarship.getApplicants();
+      assert.equal(applications.length, 0);
+    });
   });
 
   describe("#getApplicants", () => {
@@ -96,30 +100,35 @@ contract("Scholarship", accounts => {
     // Setup
     let expiredScholarship;
     let validScholarship;
-    let startingSponsorBalance;
+    let startingSponsorBalance1;
     before(async () => {
-      expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(10, 'ether') });
-      validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1], value: web3.toWei(10, 'ether') });
-      await expiredScholarship.applyTo("test link", { from: accounts[2] });
-      await validScholarship.applyTo("test link", { from: accounts[2] });
-      await expiredScholarship.awardTo(accounts[2], { from: accounts[1] });
-      await validScholarship.awardTo(accounts[2], { from: accounts[1] });
+      expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(1, 'ether') });
+      validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[2], value: web3.toWei(1, 'ether') });
+      await expiredScholarship.applyTo("test link", { from: accounts[3] });
+      await validScholarship.applyTo("test link", { from: accounts[3] });
+      await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
+      await validScholarship.awardTo(accounts[3], { from: accounts[2] });
+      startingSponsorBalance1 = web3.eth.getBalance(accounts[1]).toNumber();
       TT.fastForward(10, "days");
     });
     it("should forbid reclaiming from accounts other than sponsor", async () => {
-      await truffleAssert.reverts(expiredScholarship.reclaim({ from: accounts[2] }));
-      assert.equal(startingSponsorBalance)
+      await truffleAssert.reverts(expiredScholarship.reclaim({ from: accounts[3] }));
+      assert.equal(startingSponsorBalance1, web3.eth.getBalance(accounts[1]).toNumber());
     });
     it("should permit reclaiming an expired scholarship", async () => {
       await expiredScholarship.reclaim({ from: accounts[1] });
+      assert(startingSponsorBalance1 < web3.eth.getBalance(accounts[1]).toNumber());
+      assert(startingSponsorBalance1 + web3.toWei(1, 'ether') > web3.eth.getBalance(accounts[1]).toNumber());
     });
     it("should forbid reclaiming a valid scholarship", async () => {
-      await truffleAssert.reverts(validScholarship.reclaim({ from: accounts[1] }));
+      await truffleAssert.reverts(validScholarship.reclaim({ from: accounts[2] }));
     });
-    // it("should", async () => {
-    // });
   });
 
+
+  describe.only("#claim", () => {
+    
+  }
 
 
 
