@@ -1,7 +1,10 @@
+# external libries
 node_modules/*
 external_contracts/*
 build/*
 
 # log files
 *.log
+
+# temp files
 .node*
