@@ -100,7 +100,7 @@ contract("Scholarship", accounts => {
     // Setup
     let expiredScholarship;
     let validScholarship;
-    let startingSponsorBalance1;
+    let startingSponsor1Balance;
     before(async () => {
       expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(1, 'ether') });
       validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[2], value: web3.toWei(1, 'ether') });
@@ -108,28 +108,22 @@ contract("Scholarship", accounts => {
       await validScholarship.applyTo("test link", { from: accounts[3] });
       await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
       await validScholarship.awardTo(accounts[3], { from: accounts[2] });
-      startingSponsorBalance1 = web3.eth.getBalance(accounts[1]).toNumber();
+      startingSponsor1Balance = web3.eth.getBalance(accounts[1]).toNumber();
       TT.fastForward(10, "days");
     });
+    // Tests
     it("should forbid reclaiming from accounts other than sponsor", async () => {
       await truffleAssert.reverts(expiredScholarship.reclaim({ from: accounts[3] }));
-      assert.equal(startingSponsorBalance1, web3.eth.getBalance(accounts[1]).toNumber());
+      assert.equal(startingSponsor1Balance, web3.eth.getBalance(accounts[1]).toNumber());
     });
     it("should permit reclaiming an expired scholarship", async () => {
       await expiredScholarship.reclaim({ from: accounts[1] });
-      assert(startingSponsorBalance1 < web3.eth.getBalance(accounts[1]).toNumber());
-      assert(startingSponsorBalance1 + web3.toWei(1, 'ether') > web3.eth.getBalance(accounts[1]).toNumber());
+      assert(startingSponsor1Balance < web3.eth.getBalance(accounts[1]).toNumber());
+      assert(startingSponsor1Balance + web3.toWei(1, 'ether') > web3.eth.getBalance(accounts[1]).toNumber());
     });
     it("should forbid reclaiming a valid scholarship", async () => {
       await truffleAssert.reverts(validScholarship.reclaim({ from: accounts[2] }));
     });
   });
-
-
-  describe.only("#claim", () => {
-    
-  }
-
-
 
 });

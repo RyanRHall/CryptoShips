@@ -4,9 +4,12 @@ import "../external_contracts/oraclizeAPI_0.4.25.sol";
 import "../external_contracts/strings.sol";
 
 contract Scholarship is usingOraclize {
-  using strings for *;
 
-  /************************* State *************************/
+  /************************** Libraries **************************/
+
+    using strings for *;
+
+  /**************************** State ****************************/
 
   address public sponsor;
   address public recipient;
@@ -22,27 +25,26 @@ contract Scholarship is usingOraclize {
   mapping (address => string) public applications;
   address[] public applicants;
 
-  // testing
-  string public test1;
-  string public test2;
-  string public test3;
-
-  /************************* Modifiers *************************/
+  /************************** Modifiers **************************/
 
   modifier ensureInactive {
-    require(!_active()); _;
+    require(!active()); _;
   }
 
   modifier ensureActive {
-    require(_active()); _;
+    require(active()); _;
   }
 
-  modifier sponsorOnly {
+  modifier ensureSentBySponsor {
     require(msg.sender == sponsor); _;
   }
 
-  modifier recipientOnly {
-    require(msg.sender == recipient); _;
+  modifier ensureSentByManager {
+    require(msg.sender == scholarshipManager); _;
+  }
+
+  modifier ensureOriginatesWithRecipient {
+    require(tx.origin == recipient); _;
   }
 
   /************************* Constructor *************************/
@@ -60,25 +62,8 @@ contract Scholarship is usingOraclize {
 
   /************************* Functions *************************/
 
-  function _addressToString()
-    private
-    view
-    returns(string memory) {
-      bytes32 value = bytes32(uint256(address(this)));
-      bytes memory alphabet = "0123456789abcdef";
-
-      bytes memory str = new bytes(42);
-      str[0] = '0';
-      str[1] = 'x';
-      for (uint i = 0; i < 20; i++) {
-          str[2+i*2] = alphabet[uint(value[i + 12] >> 4)];
-          str[3+i*2] = alphabet[uint(value[i + 12] & 0x0f)];
-      }
-      return string(str);
-  }
-
-  function _active()
-    private
+  function active()
+    public
     view
     returns(bool) {
       return recipient != address(0) && (now - now % 1 days) - startedOn <= daysToComplete * 1 days;
@@ -94,26 +79,10 @@ contract Scholarship is usingOraclize {
   function awardTo(address _recipient)
     public
     ensureInactive
-    sponsorOnly {
+    ensureSentBySponsor {
       recipient = _recipient;
       startedOn = now - now % 1 days;
       delete applicants;
-  }
-
-  function claim(string memory verificationKey)
-    public
-    payable
-    ensureActive
-    recipientOnly {
-      string memory query =
-        /* "json(http://verify.cryptoships.xyz?verificationKey=".toSlice() */
-        "json(http://localhost:8080?verificationKey=".toSlice()
-        .concat(verificationKey.toSlice()).toSlice()
-        .concat("&contractAddress=".toSlice()).toSlice()
-        .concat(_addressToString().toSlice()).toSlice()
-        .concat(").verified".toSlice());
-      test1 = query;
-      /* oraclize_query("URL", query); */
   }
 
   function getApplicants()
@@ -124,20 +93,18 @@ contract Scholarship is usingOraclize {
   }
 
   function reclaim()
-    payable
     public
     ensureInactive
-    sponsorOnly {
+    ensureSentBySponsor {
       sponsor.transfer(address(this).balance);
   }
 
-  function __callback(bytes32 myid, string memory result)
-    public {
-      test2 = result;
-      /* require(msg.sender == oraclize_cbAddress());
-      temperature = result;
-      emit LogNewTemperatureMeasure(temperature); */
-      // Do something with the temperature measure...
+  function payout()
+    public
+    ensureActive
+    ensureSentByManager
+    ensureOriginatesWithRecipient {
+      recipient.transfer(address(this).balance);
   }
 
 }
