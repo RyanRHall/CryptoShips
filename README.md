@@ -5,6 +5,7 @@ Have you ever thought to yourself, "man, I wish more people would learn to \_\_\
 ### Tools used
   * [Truffle]
   * [Drizzle]
+  * [Oraclize]
   * [React]
   * [Puppeteer]
   * [Express]
@@ -27,6 +28,7 @@ This system is composed of three pieces:
 [React]: https://github.com/facebook/react
 [Puppeteer]: https://github.com/GoogleChrome/puppeteer
 [Express]: https://github.com/expressjs/express
+[Oraclize]: https://github.com/oraclize/ethereum-api
 
 [diplomats]: https://www.coursera.org/learn/global-diplomacy
 [data scientists]: https://www.coursera.org/learn/python-data-analysis
