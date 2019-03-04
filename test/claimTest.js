@@ -40,7 +40,7 @@ contract("claiming a scholarship", accounts => {
     //   );
     // });
 
-    it("should reject expired claims", async () => {
+    it("should reject claims on expired scholarships", async () => {
       await truffleAssert.reverts(
         scholarshipManager.claim(expiredScholarship.address, "TEST", { from: accounts[2], value: web3.toWei(0.01, 'ether') })
       );

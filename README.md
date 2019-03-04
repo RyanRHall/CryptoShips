@@ -19,6 +19,20 @@ This system is composed of three pieces:
 
 ![Architecture Diagram][architecture_diagram]
 
+## Installation
+
+Prerequisits:
+  * Node
+
+```
+# clone
+git clone https://github.com/RyanRHall/CryptoShips.git
+# install dependencies
+npm run setup
+# test
+npm run test
+```
+
 <!-- Links -->
 
 [architecture_diagram]: docs/architecture_diagram.png "Architecture Diagram"
