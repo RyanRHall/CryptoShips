@@ -14,9 +14,15 @@
   "license": "ISC",
   "devDependencies": {
     "ethereum-bridge": "^0.6.1",
-    "forever": "^0.15.3",
     "ganache-cli": "^6.4.0",
     "truffle": "^4.0.0",
     "truffle-assertions": "^0.8.0"
+  },
+  "dependencies": {
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "forever": "^0.15.3",
+    "puppeteer": "^1.12.2",
+    "web3": "^1.0.0-beta.47"
   }
 }

@@ -1,0 +1,14 @@
+version: 0.0
+os: linux
+files:
+  - source: src/
+    destination: /home/ubuntu/app/src/
+  - source: package.json
+    destination: /home/ubuntu/app/
+  - source: package-lock.json
+    destination: /home/ubuntu/app/
+hooks:
+  AfterInstall:
+    - location: deploy/after_install
+      timeout: 300
+      runas: root

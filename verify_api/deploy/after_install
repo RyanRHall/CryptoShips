@@ -1,0 +1,5 @@
+#!/bin/sh
+cd /home/ubuntu/app/
+npm install
+npm run server:stop
+npm run server:prod
