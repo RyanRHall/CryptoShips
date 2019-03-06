@@ -27,7 +27,7 @@ contract ScholarshipManager is usingOraclize  {
   constructor(string memory _verificationEndpoint)
     public {
       verificationEndpoint = _verificationEndpoint;
-      OAR = OraclizeAddrResolverI(0xAdCC06C593bA2357A95b2DCC04fac51fbdDF9049);
+      OAR = OraclizeAddrResolverI(0x9E33ecBAC395E730ecde9260BEB479F9225Fb8c3);
   }
 
   /************************* Functions ***************************/
@@ -96,19 +96,19 @@ contract ScholarshipManager is usingOraclize  {
       /* TODO: require sender == oraclize API */
       /* require(msg.sender == oraclize_cbAddress()); */
       // validate result
-      require(!result.toSlice().startsWith("false".toSlice()));
+      /* require(!result.toSlice().startsWith("false".toSlice())); */
       // extract scholarship address and verification key
-      strings.slice memory resultSlice = result.toSlice();
-      string memory scholarshipAddressString = resultSlice.split(":".toSlice()).toString();
-      address scholarshipAddress = parseAddr(scholarshipAddressString);
-      string memory verificationKey = resultSlice.toString();
+      /* strings.slice memory resultSlice = result.toSlice(); */
+      /* string memory scholarshipAddressString = resultSlice.split(":".toSlice()).toString(); */
+      /* address scholarshipAddress = parseAddr(scholarshipAddressString); */
+      /* string memory verificationKey = resultSlice.toString(); */
       // emit event
-      emit scholarshipVerified(scholarshipAddress, verificationKey);
+      /* emit scholarshipVerified(scholarshipAddress, verificationKey); */
       // add verification key to storage
-      usedVerificationKeys[verificationKey] = true;
+      /* usedVerificationKeys[verificationKey] = true; */
       // claim scholarship
-      Scholarship scholarship = Scholarship(scholarshipAddress);
-      scholarship.payout();
+      /* Scholarship scholarship = Scholarship(scholarshipAddress); */
+      /* scholarship.payout(); */
   }
 
 }

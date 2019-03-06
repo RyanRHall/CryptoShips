@@ -1,6 +1,6 @@
 # CryptoShips
 
-Have you ever thought to yourself, "man, I wish more people would learn to \_\_\_\_\_\_\_\_\_\_." Maybe you think the world needs more [diplomats], [data scientists], or [blockchain engineers]. CryptoShips is an ongoing project that enables users to sponsor and receive scholarships to Massive Open Online Courses (MOOCs) using cryptocurrencies! With CryptoShips, you can incentivize the next generation of students by sponsoring courses you want more people to take.
+Have you ever thought to yourself, "man, I wish more people would learn to \_\_\_\_\_\_\_\_\_\_." Maybe you think the world needs more [diplomats], [data scientists], or [blockchain engineers]. CryptoShips is an ongoing project that enables users to sponsor and receive scholarships to Massive Open Online Courses (MOOCs) using cryptocurrencies! With CryptoShips, you can incentivize the next generation of students by sponsoring the courses you want more people to take.
 
 ### Tools used
   * [Truffle]
@@ -26,7 +26,7 @@ Prerequisits:
 
 ```
 # clone
-git clone https://github.com/RyanRHall/CryptoShips.git
+git clone https://github.com/RyanRHall/CryptoShips.git && cd CryptoShips
 # install dependencies
 npm run setup
 # test
