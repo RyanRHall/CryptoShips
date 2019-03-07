@@ -8,6 +8,9 @@
     "deploy:verify_api": "verify_api/deploy/deploy",
     "fetch_external_contracts": "node lib/fetch_external_contracts.js",
     "postinstall": "echo 'removing duplicate dependency' && rm -rf ./node_modules/bitcore-mnemonic/node_modules/bitcore-lib",
+    "server:dev": "NODE_ENV=development node ./src/server.js",
+    "server:prod": "NODE_ENV=production npx forever start ./src/server.js",
+    "server:stop": "npx forever stop ./src/server.js",
     "setup": "npm install; npm run fetch_external_contracts; chmod +x lib/test.sh",
     "ssh": "ssh -i ~/keys/ryan_laptop_aws.pem ubuntu@18.204.215.62",
     "test": "lib/test.sh"
