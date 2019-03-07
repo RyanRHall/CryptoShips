@@ -13,6 +13,8 @@ app.use(function (req, res, next) {
   const { verificationKey, contractAddress } = req.query;
   if (!verificationKey || !contractAddress) {
     res.json({ verified: "false" });
+  } else {
+    next();
   }
 })
 
