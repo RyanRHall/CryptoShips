@@ -12,3 +12,7 @@ hooks:
     - location: verify_api/deploy/after_install
       timeout: 300
       runas: root
+  BeforeInstall:
+    - location: verify_api/deploy/before_install.sh
+      timeout: 300
+      runas: root
