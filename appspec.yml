@@ -9,6 +9,6 @@ files:
     destination: /home/ubuntu/app/
 hooks:
   AfterInstall:
-    - location: deploy/after_install
+    - location: verify_api/deploy/after_install
       timeout: 300
       runas: root
