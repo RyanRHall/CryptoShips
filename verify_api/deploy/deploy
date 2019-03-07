@@ -10,8 +10,8 @@ if [[ $REMOTE_MASTER_COMMIT_HASH != $MASTER_COMMIT_HASH ]]; then
 fi
 # deploy
 aws deploy create-deployment \
-  --application-name mooc_scholarship_daap_api \
-  --deployment-config-name CodeDeployDefault.OneAtATime \
-  --deployment-group-name mooc_scholarship_dapp_api_deployment_group \
+  --application-name CryptoShipsVerifyAPI \
+  --deployment-config-name CodeDeployDefault.AllAtOnce \
+  --deployment-group-name CryptoShipsVerifyAPI-Deploy-Rinkeby \
   --description "Deployment" \
-  --github-location repository=ryanrhall/mooc_scholarships_dapp_verify_api,commitId=$MASTER_COMMIT_HASH
+  --github-location repository=ryanrhall/cryptoships,commitId=$MASTER_COMMIT_HASH
