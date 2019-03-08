@@ -4,7 +4,7 @@ NC="\033[0m"
 REMOTE_MASTER_COMMIT_HASH=$(git rev-parse origin/master)
 MASTER_COMMIT_HASH=$(git rev-parse master)
 # ensure hashes match
-if [[ $REMOTE_MASTER_COMMIT_HASH != $MASTER_COMMIT_HASH ]]; then
+if [ $REMOTE_MASTER_COMMIT_HASH != $MASTER_COMMIT_HASH ]; then
   echo -e "${RED}Warning:${NC} The current master branch does not mach the remote master branch"
   exit 1
 fi
