@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
 app.get('/test', async (req, res) => {
   const { verificationKey, contractAddress } = req.query;
   const valid = verificationKey.match(/^valid/);
-  const response = valid ? `${contractAddress}:${verificationKey}:whuuuuut` : "false";
+  const response = valid ? `${contractAddress}:${verificationKey}` : "false";
   res.json({ verified: response });
 });
 
