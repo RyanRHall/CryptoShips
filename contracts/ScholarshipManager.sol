@@ -18,16 +18,18 @@ contract ScholarshipManager is usingOraclize  {
 
   /*************************** Events ****************************/
 
-  event scholarshipAdded(address scholarship);
-  event scholarshipVerificationRequestSent(address scholarship);
+  event scholarshipAdded(address scholarshipAddress);
+  event scholarshipVerificationRequestSent(address scholarshipAddress, string verificationKey);
   event scholarshipVerified(address scholarshipAddress, string verificationKey);
 
   /************************* Constructor *************************/
 
-  constructor(string memory _verificationEndpoint)
+  constructor(string memory _verificationEndpoint, address oraclizeResolverAddress)
     public {
       verificationEndpoint = _verificationEndpoint;
-      OAR = OraclizeAddrResolverI(0x9E33ecBAC395E730ecde9260BEB479F9225Fb8c3);
+      if (oraclizeResolverAddress != address(0)) {
+        OAR = OraclizeAddrResolverI(oraclizeResolverAddress);
+      }
   }
 
   /************************* Functions ***************************/
@@ -78,7 +80,7 @@ contract ScholarshipManager is usingOraclize  {
       require(!usedVerificationKeys[verificationKey]);
       require(scholarship.recipient() == msg.sender);
       require(scholarship.active());
-      emit scholarshipVerificationRequestSent(scholarshipAddress);
+      emit scholarshipVerificationRequestSent(scholarshipAddress, verificationKey);
       strings.slice[] memory querySlice = new strings.slice[](7);
       querySlice[0] = "json(".toSlice();
       querySlice[1] = verificationEndpoint.toSlice();
@@ -96,14 +98,14 @@ contract ScholarshipManager is usingOraclize  {
       /* TODO: require sender == oraclize API */
       /* require(msg.sender == oraclize_cbAddress()); */
       // validate result
-      /* require(!result.toSlice().startsWith("false".toSlice())); */
+      require(!result.toSlice().startsWith("false".toSlice()));
       // extract scholarship address and verification key
-      /* strings.slice memory resultSlice = result.toSlice(); */
-      /* string memory scholarshipAddressString = resultSlice.split(":".toSlice()).toString(); */
-      /* address scholarshipAddress = parseAddr(scholarshipAddressString); */
-      /* string memory verificationKey = resultSlice.toString(); */
+      strings.slice memory resultSlice = result.toSlice();
+      string memory scholarshipAddressString = resultSlice.split(":".toSlice()).toString();
+      address scholarshipAddress = parseAddr(scholarshipAddressString);
+      string memory verificationKey = resultSlice.toString();
       // emit event
-      /* emit scholarshipVerified(scholarshipAddress, verificationKey); */
+      emit scholarshipVerified(scholarshipAddress, verificationKey);
       // add verification key to storage
       /* usedVerificationKeys[verificationKey] = true; */
       // claim scholarship

@@ -10,7 +10,7 @@ contract("ScholarshipManager", accounts => {
 
   it("should use the testing endpoint", async () => {
     const endpoint = await scholarshipManager.verificationEndpoint();
-    assert.equal(endpoint, "http://localhost:8080/test")
+    assert.equal(endpoint, "http://verify.cryptoships.xyz/test")
   });
 
   it("should not have any scholarships to begin with", async () => {
@@ -26,9 +26,11 @@ contract("ScholarshipManager", accounts => {
 
   describe("#__callback", () => {
     it("separates address and key", async () => {
-      const transaction = await scholarshipManager.__callback(5, "0x0000000000000000000000000000000000000111:TEST_KEY");
-      truffleAssert.eventEmitted(transaction, 'scholarshipVerified', ev => {
-        return ev.scholarshipAddress === "0x0000000000000000000000000000000000000111" && ev.verificationKey === "TEST_KEY";
+      const tx = await scholarshipManager.__callback(5, "0x0000000000000000000000000000000000000111:TEST_KEY");
+      truffleAssert.eventEmitted(tx, 'scholarshipVerified', ev => {
+        assert.equal(ev.scholarshipAddress, "0x0000000000000000000000000000000000000111");
+        assert.equal(ev.verificationKey, "TEST_KEY");
+        return true;
       });
     });
   });

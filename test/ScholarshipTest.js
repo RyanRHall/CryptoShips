@@ -1,6 +1,6 @@
 const Scholarship = artifacts.require("Scholarship");
 const truffleAssert = require('truffle-assertions');
-const TT = require("../test_helpers/timeTravel");
+const ganache = require("../test_helpers/ganache");
 
 const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -109,7 +109,7 @@ contract("Scholarship", accounts => {
       await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
       await validScholarship.awardTo(accounts[3], { from: accounts[2] });
       startingSponsor1Balance = web3.eth.getBalance(accounts[1]).toNumber();
-      TT.fastForward(10, "days");
+      ganache.fastForward(10, "days");
     });
     // Tests
     it("should forbid reclaiming from accounts other than sponsor", async () => {

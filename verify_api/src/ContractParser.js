@@ -9,7 +9,7 @@ const PROVIDER_ENDPOINT = process.env.NODE_ENV === "production" ? RINKEBY_ENDPOI
 // configure web3
 const web3 = new Web3(new Web3.providers.HttpProvider(PROVIDER_ENDPOINT));
 
-// parse function
+// parse function TODO:
 async function parse(contractAddress) {
 
 }
