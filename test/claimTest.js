@@ -29,34 +29,23 @@ contract("claiming a scholarship", accounts => {
       await ganache.fastForward(10, "days");
     })
 
-    // assert.equal((await web3.eth.getBalance(validScholarship.address)).toString(10), web3.toWei(1, "ether"));
-    // it("should reject invalid validation key", async () => {
-    //   // TODO get price to send for ORAZLIZE
-    //   await truffleAssert.reverts(
-    //     scholarshipManager.claim(validScholarship.address, "false", { from: accounts[2] })
-    //   );
-    //   await truffleAssert.reverts(
-    //     scholarshipManager.claim(expiredScholarship.address, "false", { from: accounts[2] })
-    //   );
-    // });
-
     it("should reject claim attempts on expired scholarships", async () => {
       await truffleAssert.reverts(
-        scholarshipManager.claim(expiredScholarship.address, "TEST", { from: accounts[2] })
+        scholarshipManager.claim(expiredScholarship.address, "TEST", { from: accounts[2], value: web3.toWei(0.01, "ether") })
       );
     });
 
     it("should reject claim attempts from other accounts", async () => {
       await truffleAssert.reverts(
-        scholarshipManager.claim(validScholarship.address, "TEST", { from: accounts[3] })
+        scholarshipManager.claim(validScholarship.address, "TEST", { from: accounts[3], value: web3.toWei(0.01, "ether") })
       );
       await truffleAssert.reverts(
-        scholarshipManager.claim(validScholarship.address, "TEST", { from: accounts[1] })
+        scholarshipManager.claim(validScholarship.address, "TEST", { from: accounts[1], value: web3.toWei(0.01, "ether") })
       );
     });
 
     it("should permit claim attempts from recipient's account on valid scholarships", async () => {
-      const tx = await scholarshipManager.claim(validScholarship.address, "INVALID_KEY", { from: accounts[2] });
+      const tx = await scholarshipManager.claim(validScholarship.address, "INVALID_KEY", { from: accounts[2], value: web3.toWei(0.01, "ether") });
       const startingBlockHeight = await ganache.blockHeight();
       truffleAssert.eventEmitted(tx, "scholarshipVerificationRequestSent", ev => {
         assert.equal(ev.scholarshipAddress, validScholarship.address);
@@ -70,10 +59,10 @@ contract("claiming a scholarship", accounts => {
 
     it("should forbid claims with invalid key", async () => {
       const startingBalance = web3.eth.getBalance(accounts[2]).toNumber();
-      await scholarshipManager.claim(validScholarship.address, "INVALID_KEY2", { from: accounts[2] });
+      await scholarshipManager.claim(validScholarship.address, "INVALID_KEY", { from: accounts[2], value: web3.toWei(0.01, "ether") });
       await ganache.waitForNewBlock();
       const endingBalance = web3.eth.getBalance(accounts[2]).toNumber();
-      assert.equal(startingBalance > endingBalance, "User should lose money on transaction, and receive no reward from invalid key");
+      assert(startingBalance > endingBalance, "User should lose money on transaction, and receive no reward from invalid key");
     });
   });
 

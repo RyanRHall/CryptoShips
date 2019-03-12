@@ -107,7 +107,7 @@ contract ScholarshipManager is usingOraclize  {
       // emit event
       emit scholarshipVerified(scholarshipAddress, verificationKey);
       // add verification key to storage
-      /* usedVerificationKeys[verificationKey] = true; */
+      usedVerificationKeys[verificationKey] = true;
       // claim scholarship
       /* Scholarship scholarship = Scholarship(scholarshipAddress); */
       /* scholarship.payout(); */
