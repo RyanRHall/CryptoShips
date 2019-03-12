@@ -1,7 +1,7 @@
 const web3Utils = require("web3-utils");
 
-const jsonrpc = '2.0';
-const id = 0;
+// const jsonrpc = "2.0";
+// const id = 0;
 
 const TIME_UNITS = {
   seconds: 1,
@@ -10,18 +10,18 @@ const TIME_UNITS = {
   days: 86400
 }
 
-const send = (method, params = []) =>
+const send = (method, { id=0, jsonrpc="2.0", params=[] } = {}) =>
   web3.currentProvider.send({ id, jsonrpc, method, params })
 
 const fastForward = async (n, unit="seconds") => {
   if (!Object.keys(TIME_UNITS).includes(unit)) { throw `unknown unit ${unit}` }
   seconds = n * TIME_UNITS[unit];
-  await send('evm_increaseTime', [seconds]);
-  await send('evm_mine');
+  await send("evm_increaseTime", { params: [ seconds ] });
+  await send("evm_mine");
 }
 
 const blockHeight = async () => {
-  const result = (await send('eth_blockNumber').result);
+  const result = (await send("eth_blockNumber").result);
   return web3Utils.hexToNumber(result);
 }
 
@@ -39,6 +39,23 @@ const waitForNewBlock = async ({ timeout: timeout } = { timeout: 20000 }) => {
   raise("Time-out: new block never mined");
 }
 
+const takeSnapshot = async () => {
+  const result = (await send("evm_snapshot").result);
+  return web3Utils.hexToNumber(result);
+
+  // return await send("evm_snapshot")
+}
+
+const revertToSnapshot = async id => {
+  // const hexId = web3Utils.numberToHex(id);
+  // return await send("evm_revert", [hexId]);
+  // const hexId = web3Utils.numberToHex(id);
+  // await web3.currentProvider.evm_revert(id)
+  return await send("evm_revert", { id });
+}
+
 exports.fastForward = fastForward;
 exports.blockHeight = blockHeight;
 exports.waitForNewBlock = waitForNewBlock;
+exports.takeSnapshot = takeSnapshot;
+exports.revertToSnapshot = revertToSnapshot;

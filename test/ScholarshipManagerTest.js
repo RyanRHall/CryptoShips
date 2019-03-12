@@ -5,7 +5,7 @@ contract("ScholarshipManager", accounts => {
   let scholarshipManager;
 
   before(async () => {
-    scholarshipManager = await ScholarshipManager.deployed();
+    scholarshipManager = await ScholarshipManager.new("http://verify.cryptoships.xyz/test", "0x6f485C8BF6fc43eA212E93BBF8ce046C7f1cb475", { from: accounts[0] });
   })
 
   it("should use the testing endpoint", async () => {
@@ -22,17 +22,6 @@ contract("ScholarshipManager", accounts => {
     await scholarshipManager.create(10, "test instructions", "test school", "test course");
     const scholarships = await scholarshipManager.getScholarships();
     assert.equal(scholarships.length, 1);
-  });
-
-  describe("#__callback", () => {
-    it("separates address and key", async () => {
-      const tx = await scholarshipManager.__callback(5, "0x0000000000000000000000000000000000000111:TEST_KEY");
-      truffleAssert.eventEmitted(tx, 'scholarshipVerified', ev => {
-        assert.equal(ev.scholarshipAddress, "0x0000000000000000000000000000000000000111");
-        assert.equal(ev.verificationKey, "TEST_KEY");
-        return true;
-      });
-    });
   });
 
 });

@@ -25,6 +25,11 @@ contract Scholarship is usingOraclize {
   mapping (address => string) public applications;
   address[] public applicants;
 
+
+  /*************************** Events ****************************/
+
+  event payoutMade(address recipient, uint amount);
+
   /************************** Modifiers **************************/
 
   modifier ensureInactive {
@@ -41,10 +46,6 @@ contract Scholarship is usingOraclize {
 
   modifier ensureSentByManager {
     require(msg.sender == scholarshipManager); _;
-  }
-
-  modifier ensureOriginatesWithRecipient {
-    require(tx.origin == recipient); _;
   }
 
   /************************* Constructor *************************/
@@ -102,8 +103,7 @@ contract Scholarship is usingOraclize {
   function payout()
     public
     ensureActive
-    ensureSentByManager
-    ensureOriginatesWithRecipient {
+    ensureSentByManager {
       recipient.transfer(address(this).balance);
   }
 

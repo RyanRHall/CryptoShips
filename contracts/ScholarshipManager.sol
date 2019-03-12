@@ -109,8 +109,8 @@ contract ScholarshipManager is usingOraclize  {
       // add verification key to storage
       usedVerificationKeys[verificationKey] = true;
       // claim scholarship
-      /* Scholarship scholarship = Scholarship(scholarshipAddress); */
-      /* scholarship.payout(); */
+      Scholarship scholarship = Scholarship(scholarshipAddress);
+      scholarship.payout();
   }
 
 }
