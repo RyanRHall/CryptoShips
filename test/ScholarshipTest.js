@@ -123,25 +123,4 @@ contract("Scholarship", accounts => {
     });
   });
 
-  // describe("#payout", () => {
-  //   // Setup
-  //   let expiredScholarship;
-  //   let validScholarship;
-  //   let startingRecipientBalance;
-  //   before(async () => {
-  //     expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(1, 'ether') });
-  //     validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1], value: web3.toWei(1, 'ether') });
-  //     await expiredScholarship.applyTo("test link", { from: accounts[2] });
-  //     await validScholarship.applyTo("test link", { from: accounts[2] });
-  //     await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
-  //     await validScholarship.awardTo(accounts[3], { from: accounts[1] });
-  //     startingRecipientBalance = web3.eth.getBalance(accounts[2]).toNumber();
-  //     ganache.fastForward(10, "days");
-  //   });
-  //   // Tests
-  //   it("should forbid payouts to ", async () => {
-  //     await truffleAssert.reverts(validScholarship.reclaim({ from: accounts[2] }));
-  //   });
-  // }
-
 });

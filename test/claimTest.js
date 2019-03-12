@@ -65,6 +65,18 @@ contract("ScholarshipManager <--> Scholarship", accounts => {
       assert(startingBalance > endingBalance, "User should lose money on transaction, and receive no reward from invalid key");
     });
 
+    it("should forbid calling #__callback from arbitrary addresses", async () => {
+      await truffleAssert.reverts(
+        scholarshipManager.__callback(5, `${validScholarship.address}:VALID_KEY`, { from: accounts[0] })
+      );
+      await truffleAssert.reverts(
+        scholarshipManager.__callback(5, `${validScholarship.address}:VALID_KEY`, { from: accounts[1] })
+      );
+      await truffleAssert.reverts(
+        scholarshipManager.__callback(5, `${validScholarship.address}:VALID_KEY`, { from: accounts[2] })
+      );
+    });
+
     it("should permit claims with valid key", async () => {
       await scholarshipManager.claim(validScholarship.address, "VALID_KEY", { from: accounts[2], value: web3.toWei(0.01, "ether") });
       await ganache.waitForNewBlock();

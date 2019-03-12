@@ -42,15 +42,9 @@ const waitForNewBlock = async ({ timeout: timeout } = { timeout: 20000 }) => {
 const takeSnapshot = async () => {
   const result = (await send("evm_snapshot").result);
   return web3Utils.hexToNumber(result);
-
-  // return await send("evm_snapshot")
 }
 
 const revertToSnapshot = async id => {
-  // const hexId = web3Utils.numberToHex(id);
-  // return await send("evm_revert", [hexId]);
-  // const hexId = web3Utils.numberToHex(id);
-  // await web3.currentProvider.evm_revert(id)
   return await send("evm_revert", { id });
 }
 

@@ -93,10 +93,10 @@ contract ScholarshipManager is usingOraclize  {
       oraclize_query("URL", query);
   }
 
-  function __callback(bytes32 myid, string memory result)
+  function __callback(bytes32 id, string memory result)
     public {
       /* TODO: require sender == oraclize API */
-      /* require(msg.sender == oraclize_cbAddress()); */
+      require(msg.sender == oraclize_cbAddress());
       // validate result
       require(!result.toSlice().startsWith("false".toSlice()));
       // extract scholarship address and verification key
