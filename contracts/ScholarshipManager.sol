@@ -14,7 +14,7 @@ contract ScholarshipManager is usingOraclize  {
 
   string public verificationEndpoint;
   mapping (string => bool) usedVerificationKeys;
-  address[] public scholarships;
+  address[] public scholarshipAddresses;
 
   /*************************** Events ****************************/
 
@@ -51,19 +51,19 @@ contract ScholarshipManager is usingOraclize  {
       return string(str);
   }
 
-  function create(uint256 daysToComplete, string memory instructions, string memory schoolName, string memory courseName)
+  function create(uint256 daysToComplete, string memory schoolName, string memory courseName)
     public
     payable {
-      Scholarship newScholarship = (new Scholarship).value(msg.value)(daysToComplete, instructions, schoolName, courseName);
-      scholarships.push(address(newScholarship));
+      Scholarship newScholarship = (new Scholarship).value(msg.value)(daysToComplete, schoolName, courseName);
+      scholarshipAddresses.push(address(newScholarship));
       emit scholarshipAdded(address(newScholarship));
   }
 
-  function getScholarships()
+  function getScholarshipAddresses()
     public
     view
     returns(address[] memory) {
-      return scholarships;
+      return scholarshipAddresses;
   }
 
   function verificationKeyUsed(string memory key)

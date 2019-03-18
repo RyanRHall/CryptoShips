@@ -1,13 +1,6 @@
 pragma solidity ^0.4.25;
 
-import "../external_contracts/oraclizeAPI_0.4.25.sol";
-import "../external_contracts/strings.sol";
-
-contract Scholarship is usingOraclize {
-
-  /************************** Libraries **************************/
-
-    using strings for *;
+contract Scholarship {
 
   /**************************** State ****************************/
 
@@ -18,7 +11,6 @@ contract Scholarship is usingOraclize {
   string public schoolName;
   string public courseName;
   /* Scholarship Info */
-  string public instructions;
   uint public startedOn;
   uint public daysToComplete;
   bool completed;
@@ -50,13 +42,12 @@ contract Scholarship is usingOraclize {
 
   /************************* Constructor *************************/
 
-  constructor(uint256 _daysToComplete, string memory _instructions, string memory _schoolName, string memory _courseName)
+  constructor(uint256 _daysToComplete, string memory _schoolName, string memory _courseName)
     payable
     public {
       sponsor = tx.origin;
       scholarshipManager = msg.sender;
       daysToComplete = _daysToComplete;
-      instructions = _instructions;
       schoolName = _schoolName;
       courseName = _courseName;
   }

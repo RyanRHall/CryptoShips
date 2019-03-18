@@ -1,7 +1,7 @@
 const ScholarshipManager = artifacts.require("ScholarshipManager");
 const truffleAssert = require('truffle-assertions');
 
-contract("ScholarshipManager", accounts => {
+contract.only("ScholarshipManager", accounts => {
   let scholarshipManager;
 
   before(async () => {
@@ -14,13 +14,13 @@ contract("ScholarshipManager", accounts => {
   });
 
   it("should not have any scholarships to begin with", async () => {
-    const scholarships = await scholarshipManager.getScholarships();
+    const scholarships = await scholarshipManager.getScholarshipAddresses();
     assert.equal(scholarships.length, 0);
   });
 
   it("allows creation of scholarships", async () => {
-    await scholarshipManager.create(10, "test instructions", "test school", "test course");
-    const scholarships = await scholarshipManager.getScholarships();
+    await scholarshipManager.create(10, "test school", "test course");
+    const scholarships = await scholarshipManager.getScholarshipAddresses();
     assert.equal(scholarships.length, 1);
   });
 
