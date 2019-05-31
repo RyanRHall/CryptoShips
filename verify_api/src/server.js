@@ -21,8 +21,8 @@ app.use(function (req, res, next) {
 // Endpoint for tests
 app.get('/test', async (req, res) => {
   const { verificationKey, contractAddress } = req.query;
-  const valid = verificationKey.match(/^VALID/);
-  const response = valid ? `${contractAddress}:${verificationKey}` : "false";
+  const valid = verificationKey.match(/^VALID_KEY/);
+  const response = valid ? "true" : "false";
   res.json({ verified: response });
 });
 
