@@ -22,7 +22,8 @@ This system is composed of three pieces:
 ## Installation
 
 Prerequisits:
-  * Node
+
+  * Node 10 +
 
 ```
 # clone
@@ -32,6 +33,16 @@ npm run setup
 # test
 npm run test
 ```
+
+## To-Dos:
+
+* [ ] Convert to upgradeable contracts using zeppelinOS
+* [ ] Upgrade to oraclize api 0.5 and switch to #strConcat
+* [ ] Use zeppelinOS for package management
+* [ ] Build out front end
+* [ ] Add mock functionality to test UI on dev/testnets
+* [ ] Host frontend
+
 
 <!-- Links -->
 

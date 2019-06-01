@@ -1,8 +1,7 @@
 const Scholarship = artifacts.require("Scholarship");
 const truffleAssert = require('truffle-assertions');
 const ganache = require("../test_helpers/ganache");
-
-const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
+const { localOraclizeResolverAddress, zeroAddress } = require("../config/Constants.js")
 
 contract("Scholarship", accounts => {
 
@@ -10,23 +9,25 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "test instructions", "test school", "test course", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "test school", "test course", localOraclizeResolverAddress, { from: accounts[1] });
     })
     // Tests
     it("should be sponsored by transaction author", async () => {
       assert.equal(await scholarship.sponsor(), accounts[1]);
     });
     it("should not have a recipient", async () => {
-      assert.equal(await scholarship.recipient(), ZERO_ADDRESS);
+      assert.equal(await scholarship.recipient(), zeroAddress);
     });
     it("should appropriately assign constructor arguments", async () => {
       assert.equal(await scholarship.daysToComplete(), 10);
-      assert.equal(await scholarship.instructions(), "test instructions");
       assert.equal(await scholarship.schoolName(), "test school");
       assert.equal(await scholarship.courseName(), "test course");
     });
     it("should not have any applicants", async () => {
       assert.equal((await scholarship.getApplicants()).length, 0);
+    });
+    it("should not have a verification key set", async () => {
+      assert.equal(await scholarship.verificationKey(), "");
     });
   })
 
@@ -34,7 +35,7 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
     });
@@ -54,7 +55,7 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
       await scholarship.awardTo(accounts[2], { from: accounts[1] });
@@ -80,7 +81,7 @@ contract("Scholarship", accounts => {
     // Setup
     let scholarship;
     before(async () => {
-      scholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[1] });
+      scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
       await scholarship.applyTo("test link 2", { from: accounts[2] });
       await scholarship.applyTo("test link 3", { from: accounts[3] });
     });
@@ -99,8 +100,8 @@ contract("Scholarship", accounts => {
     let validScholarship;
     let startingSponsor1Balance;
     before(async () => {
-      expiredScholarship = await Scholarship.new(9, "_", "_", "_", { from: accounts[1], value: web3.toWei(1, 'ether') });
-      validScholarship = await Scholarship.new(10, "_", "_", "_", { from: accounts[2], value: web3.toWei(1, 'ether') });
+      expiredScholarship = await Scholarship.new(9, "_", "_", localOraclizeResolverAddress, { from: accounts[1], value: web3.toWei(1, 'ether') });
+      validScholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[2], value: web3.toWei(1, 'ether') });
       await expiredScholarship.applyTo("test link", { from: accounts[3] });
       await validScholarship.applyTo("test link", { from: accounts[3] });
       await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
