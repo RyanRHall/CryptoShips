@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const ENDPOINT = "https://www.coursera.org/account/accomplishments/verify/";
+const { courseraEndpoint } = require("../config/Constants.js")
 
 // main parse function
 async function parse(verificationKey) {
@@ -8,7 +8,7 @@ async function parse(verificationKey) {
   let responseBody;
   try {
     // make request to coursera
-    const url = new URL(verificationKey, ENDPOINT);
+    const url = new URL(verificationKey, courseraEndpoint);
     await page.goto(url.href);
     // extract course certificate information from page
     const certificateParams = await page.evaluate(_certificateInformationExtraction);

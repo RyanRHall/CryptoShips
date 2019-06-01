@@ -15,7 +15,7 @@
     "server:app": "node app/config/dev_server.js",
     "seed": "npx truffle exec lib/seed.js",
     "setup": "npm install; npm run fetch_external_contracts; chmod +x lib/test.sh",
-    "ssh": "ssh -i ~/keys/ryan_laptop_aws.pem ubuntu@18.204.215.62",
+    "ssh": "ssh -i ~/keys/ryan_laptop_aws.pem ubuntu@34.226.136.190",
     "test": "lib/test.sh"
   },
   "author": "",

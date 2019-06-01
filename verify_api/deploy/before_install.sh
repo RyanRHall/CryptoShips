@@ -1,8 +1,8 @@
-if [ -d /home/ubuntu/app/ ]; then
-    cd /home/ubuntu/app/
+if [ -d /home/ubuntu/verify_api/ ]; then
+    cd /home/ubuntu/verify_api/
     # stop server
     npm run server:stop
     # remove directory
-    rm -rf /home/ubuntu/app/
+    rm -rf /home/ubuntu/verify_api/
 fi
-mkdir /home/ubuntu/app/
+mkdir /home/ubuntu/verify_api/
