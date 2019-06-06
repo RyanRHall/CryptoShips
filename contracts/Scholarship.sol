@@ -10,6 +10,13 @@ contract Scholarship is usingOraclize {
 
   using strings for *;
 
+  /*************************** Structs ***************************/
+
+  struct Application {
+    string studentName;
+    string applicationLink;
+  }
+
   /**************************** State ****************************/
 
   address public sponsor;
@@ -22,10 +29,9 @@ contract Scholarship is usingOraclize {
   uint public startedOn;
   uint public daysToComplete;
   bool completed;
-  mapping (address => string) public applications;
+  mapping (address => Application) public applications;
   address[] public applicants;
   string public verificationKey;
-
 
   /*************************** Events ****************************/
 
@@ -91,10 +97,11 @@ contract Scholarship is usingOraclize {
       return string(str);
     }
 
-  function applyTo(string memory applicationLink)
+  function applyTo(string memory studentName, string memory applicationLink)
     public
     ensureInactive {
-      applications[msg.sender] = applicationLink;
+      Application memory newApplication = Application({ studentName: studentName, applicationLink: applicationLink });
+      applications[msg.sender] = newApplication;
       applicants.push(msg.sender);
     }
 
@@ -119,6 +126,13 @@ contract Scholarship is usingOraclize {
     ensureInactive
     ensureSentBySponsor {
       sponsor.transfer(address(this).balance);
+    }
+
+  function studentName()
+    public
+    view
+    returns(string) {
+      return applications[recipient].studentName;
     }
 
   function claim(string _verificationKey)
@@ -147,11 +161,6 @@ contract Scholarship is usingOraclize {
       require(msg.sender == oraclize_cbAddress());
       // validate result
       require(result.toSlice().equals("true".toSlice()));
-      // extract scholarship address and verification key
-      /* strings.slice memory resultSlice = result.toSlice();
-      string memory scholarshipAddressString = resultSlice.split(":".toSlice()).toString();
-      address scholarshipAddress = parseAddr(scholarshipAddressString);
-      string memory verificationKey = resultSlice.toString(); */
       // add verification key to storage
       manager.setVerificationKeyUsed(verificationKey);
       // claim scholarship

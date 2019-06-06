@@ -30,8 +30,8 @@ contract("ScholarshipManager <--> Scholarship", accounts => {
     );
     validScholarship = Scholarship.at(tx1.logs[0].args.scholarshipAddress);
     expiredScholarship = Scholarship.at(tx2.logs[0].args.scholarshipAddress);
-    await validScholarship.applyTo("application", { from: recipient });
-    await expiredScholarship.applyTo("application", { from: recipient });
+    await validScholarship.applyTo("name", "application", { from: recipient });
+    await expiredScholarship.applyTo("name", "application", { from: recipient });
     await validScholarship.awardTo(recipient, { from: sponsor });
     await expiredScholarship.awardTo(recipient, { from: sponsor });
     recipientStartingBalance = web3.eth.getBalance(recipient).toNumber();
@@ -84,7 +84,7 @@ contract("ScholarshipManager <--> Scholarship", accounts => {
         10, "_", "_", { from: sponsor, value: web3.toWei(1, "ether") }
       );
       const otherValidScholarship = Scholarship.at(tx.logs[0].args.scholarshipAddress);
-      await otherValidScholarship.applyTo("application", { from: recipient });
+      await otherValidScholarship.applyTo("name", "application", { from: recipient });
       await otherValidScholarship.awardTo(recipient, { from: sponsor });
       await validScholarship.claim("VALID_KEY", { from: recipient, value: web3.toWei(0.01, "ether") });
       await ganache.waitForNewBlock();

@@ -29,6 +29,9 @@ contract("Scholarship", accounts => {
     it("should not have a verification key set", async () => {
       assert.equal(await scholarship.verificationKey(), "");
     });
+    it("should not have a student set", async () => {
+      assert.equal(await scholarship.studentName(), "");
+    });
   })
 
   describe("#applyTo", () => {
@@ -36,13 +39,17 @@ contract("Scholarship", accounts => {
     let scholarship;
     before(async () => {
       scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
-      await scholarship.applyTo("test link 2", { from: accounts[2] });
-      await scholarship.applyTo("test link 3", { from: accounts[3] });
+      await scholarship.applyTo("name 2", "link 2", { from: accounts[2] });
+      await scholarship.applyTo("name 3", "link 3", { from: accounts[3] });
     });
     // Tests
-    it("should add the application link to the mapping", async () => {
-      assert.equal(await scholarship.applications(accounts[2]), "test link 2");
-      assert.equal(await scholarship.applications(accounts[3]), "test link 3");
+    it("should add the application to the mapping", async () => {
+      let [ name2, link2 ] = await scholarship.applications(accounts[2])
+      let [ name3, link3 ] = await scholarship.applications(accounts[3])
+      assert.equal(name2, "name 2");
+      assert.equal(link2, "link 2");
+      assert.equal(name3, "name 3");
+      assert.equal(link3, "link 3");
     });
     it("should add the applicant to the list of applicants", async () => {
       assert.equal((await scholarship.getApplicants()).length, 2);
@@ -56,8 +63,8 @@ contract("Scholarship", accounts => {
     let scholarship;
     before(async () => {
       scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
-      await scholarship.applyTo("test link 2", { from: accounts[2] });
-      await scholarship.applyTo("test link 3", { from: accounts[3] });
+      await scholarship.applyTo("name 2", "link 2", { from: accounts[2] });
+      await scholarship.applyTo("name 3", "link 3", { from: accounts[3] });
       await scholarship.awardTo(accounts[2], { from: accounts[1] });
     });
     // Tests
@@ -75,6 +82,9 @@ contract("Scholarship", accounts => {
       const applications = await scholarship.getApplicants();
       assert.equal(applications.length, 0);
     });
+    it("should have a studentName", async () => {
+      assert.equal(await scholarship.studentName(), "name 2");
+    });
   });
 
   describe("#getApplicants", () => {
@@ -82,8 +92,8 @@ contract("Scholarship", accounts => {
     let scholarship;
     before(async () => {
       scholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[1] });
-      await scholarship.applyTo("test link 2", { from: accounts[2] });
-      await scholarship.applyTo("test link 3", { from: accounts[3] });
+      await scholarship.applyTo("name 2", "link 2", { from: accounts[2] });
+      await scholarship.applyTo("name 3", "link 3", { from: accounts[3] });
     });
     // Tests
     it("should return a list of active applications", async () => {
@@ -102,8 +112,8 @@ contract("Scholarship", accounts => {
     before(async () => {
       expiredScholarship = await Scholarship.new(9, "_", "_", localOraclizeResolverAddress, { from: accounts[1], value: web3.toWei(1, 'ether') });
       validScholarship = await Scholarship.new(10, "_", "_", localOraclizeResolverAddress, { from: accounts[2], value: web3.toWei(1, 'ether') });
-      await expiredScholarship.applyTo("test link", { from: accounts[3] });
-      await validScholarship.applyTo("test link", { from: accounts[3] });
+      await expiredScholarship.applyTo("name", "link", { from: accounts[3] });
+      await validScholarship.applyTo("name", "link", { from: accounts[3] });
       await expiredScholarship.awardTo(accounts[3], { from: accounts[1] });
       await validScholarship.awardTo(accounts[3], { from: accounts[2] });
       startingSponsor1Balance = web3.eth.getBalance(accounts[1]).toNumber();
