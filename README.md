@@ -15,7 +15,7 @@ Have you ever thought to yourself, "man, I wish more people would learn to \_\_\
 This system is composed of three pieces:
   * Ethereum smart contracts
   * A front-end application
-  * A verification API
+  * [A verification API][[CryptoShips API]]
 
 ![Architecture Diagram][architecture_diagram]
 
@@ -58,3 +58,5 @@ npm run test
 [diplomats]: https://www.coursera.org/learn/global-diplomacy
 [data scientists]: https://www.coursera.org/learn/python-data-analysis
 [blockchain engineers]: https://www.coursera.org/learn/blockchain-foundations-and-use-cases
+
+[CryptoShips API]: https://github.com/RyanRHall/CryptoShipsVerifyAPI
