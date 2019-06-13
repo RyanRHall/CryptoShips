@@ -14,8 +14,8 @@ Have you ever thought to yourself, "man, I wish more people would learn to \_\_\
 
 This system is composed of three pieces:
   * Ethereum smart contracts
-  * A front-end application
-  * [A verification API][[CryptoShips API]]
+  * [A front-end application][CryptoShips Frontend]
+  * [A verification API][CryptoShips API]
 
 ![Architecture Diagram][architecture_diagram]
 
@@ -39,6 +39,7 @@ npm run test
 * [ ] Convert to upgradeable contracts using zeppelinOS
 * [ ] Upgrade to oraclize api 0.5 and switch to #strConcat
 * [ ] Use zeppelinOS for package management
+  * [ ] Use revert reasons
 * [ ] Build out front end
 * [ ] Add mock functionality to test UI on dev/testnets
 * [ ] Host frontend
@@ -60,3 +61,4 @@ npm run test
 [blockchain engineers]: https://www.coursera.org/learn/blockchain-foundations-and-use-cases
 
 [CryptoShips API]: https://github.com/RyanRHall/CryptoShipsVerifyAPI
+[CryptoShips Frontend]: https://github.com/RyanRHall/CryptoShipsFrontend
