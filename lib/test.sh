@@ -2,7 +2,7 @@
 # test blockchain setup on port 7545
 export NODE_ENV=test
 echo "starting ganache..."
-npx forever start ./node_modules/.bin/ganache-cli -m "CryptoShips" --port 7545 > /dev/null 2>&1 &
+npx forever start ./node_modules/.bin/ganache-cli -m "CryptoShips" --networkId 999999999 --port 7545 > /dev/null 2>&1 &
 # TODO way to avoid hard-coded waits?
 sleep 5s
 echo "starting ethereum-bridge..."
