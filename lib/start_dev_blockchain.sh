@@ -21,7 +21,7 @@ npx truffle migrate --network development
 echo "seeding..."
 npx truffle exec lib/seed.js
 echo "updating companion services..."
-npm run update_contract_builds
+npm run sync_contract_builds
 
 echo -n "Running Blockchain on localhost:8545..."
 
