@@ -1,7 +1,6 @@
 var ScholarshipManager = artifacts.require("./ScholarshipManager.sol");
 const { localOraclizeResolverAddress, testVerificationEndpoint, prodVerificationEndpoint, zeroAddress } = require("../config/Constants.js")
 
-
 // determine endpoint to use for verifying courses
 const endpoint = process.env.NODE_ENV === "production" ? prodVerificationEndpoint : testVerificationEndpoint;
 

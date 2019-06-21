@@ -135,6 +135,13 @@ contract Scholarship is usingOraclize {
       return applications[recipient].studentName;
     }
 
+  function value()
+    public
+    view
+    returns(uint) {
+      return address(this).balance;
+    }
+
   function claim(string _verificationKey)
     public
     payable {

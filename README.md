@@ -36,6 +36,7 @@ npm run test
 
 ## To-Dos:
 
+* [ ] Upgrade to solidity 0.5
 * [ ] Convert to upgradeable contracts using zeppelinOS
 * [ ] Upgrade to oraclize api 0.5 and switch to #strConcat
 * [ ] Use zeppelinOS for package management
