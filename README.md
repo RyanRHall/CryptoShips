@@ -1,6 +1,13 @@
 # CryptoShips
 
+### About
+
 Have you ever thought to yourself, "man, I wish more people would learn to \_\_\_\_\_\_\_\_\_\_." Maybe you think the world needs more [diplomats], [data scientists], or [blockchain engineers]. CryptoShips is an ongoing project that enables users to sponsor and receive scholarships to Massive Open Online Courses (MOOCs) using cryptocurrencies! With CryptoShips, you can incentivize the next generation of students by sponsoring the courses you want more people to take.
+
+### Other Repositories
+* [CryptoShips Frontend][CryptoShips Frontend]
+* [CryptoShips Verification API][CryptoShips API]
+
 
 ### Tools used
   * [Truffle]
@@ -14,8 +21,8 @@ Have you ever thought to yourself, "man, I wish more people would learn to \_\_\
 
 This system is composed of three pieces:
   * Ethereum smart contracts
-  * [A front-end application][CryptoShips Frontend]
-  * [A verification API][CryptoShips API]
+  * A front-end application
+  * A verification API
 
 ![Architecture Diagram][architecture_diagram]
 
